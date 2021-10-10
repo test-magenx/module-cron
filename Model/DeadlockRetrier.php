@@ -18,20 +18,6 @@ use Magento\Framework\DB\Adapter\DeadlockException;
 class DeadlockRetrier implements DeadlockRetrierInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(
-        \Psr\Log\LoggerInterface $logger
-    ) {
-        $this->logger = $logger;
-    }
-
-    /**
      * @inheritdoc
      */
     public function execute(callable $callback, AdapterInterface $connection)
@@ -44,7 +30,6 @@ class DeadlockRetrier implements DeadlockRetrierInterface
             try {
                 return $callback();
             } catch (DeadlockException $e) {
-                $this->logger->warning(sprintf("Deadlock detected in cron: %s", $e->getMessage()));
                 continue;
             }
         }
